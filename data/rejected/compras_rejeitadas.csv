@@ -1,0 +1,8 @@
+process_id,item_id,publication_date,organization_code,purchase_modality,category,item_description,quantity,estimated_unit_value,status,rejection_reason
+P005,I001,31/02/2026,ORG02,Dispensa,Material de escritório,Caneta esferográfica,50,2.50,Publicado,Data inválida: 31/02/2026
+P006,I001,18/02/2026,ORG03,Pregão,Equipamentos de informática,Teclado USB,0,85.00,Publicado,quantity deve ser maior que zero: 0
+P007,I001,20/02/2026,ORG01,Convite,Mobiliário,Mesa de reunião,2,1800.00,Publicado,Valor não permitido em purchase_modality: Convite
+P008,I001,22/02/2026,ORG02,Dispensa,Material de escritório,Pasta arquivo,30,texto,Concluído,Valor numérico inválido em estimated_unit_value: texto
+P009,I001,25/02/2026,ORG03,Concorrência,Serviços de manutenção,Pintura predial,-1,12500.00,Em andamento,quantity deve ser maior que zero: -1
+P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,,5,980.00,Publicado,Campo obrigatório vazio: item_description
+P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,Armário baixo,5,980.00,Publicado,"Chave duplicada: process_id=P010, item_id=I001"

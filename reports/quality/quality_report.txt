@@ -1,0 +1,5 @@
+RELATÓRIO DE QUALIDADE
+=====================
+Total de registros lidos: 12
+Registros válidos: 5
+Registros rejeitados: 7
