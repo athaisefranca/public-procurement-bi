@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Configuracoes locais
+.env
+.vscode/settings.json
+
+# Arquivos temporarios
+*.tmp
+*.log
+*.bak
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Testes futuros
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dados locais nao publicaveis
+data/local/
