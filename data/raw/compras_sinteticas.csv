@@ -1,0 +1,13 @@
+process_id,item_id,publication_date,organization_code,purchase_modality,category,item_description,quantity,estimated_unit_value,status
+P001,I001,15/01/2026,ORG01,Pregão,Equipamentos de informática,Notebook corporativo,10,3500.00,Publicado
+P001,I002,15/01/2026,ORG01,Pregão,Equipamentos de informática,Monitor 24 polegadas,10,1200.00,Publicado
+P002,I001,20/01/2026,ORG02,Dispensa,Material de escritório,Papel A4,100,32.50,Concluído
+P003,I001,05/02/2026,ORG03,Concorrência,Serviços de manutenção,Manutenção preventiva,1,8500.00,Em andamento
+P004,I001,10/02/2026,ORG01,Pregão,Mobiliário,Cadeira de escritório,20,450.00,Publicado
+P005,I001,31/02/2026,ORG02,Dispensa,Material de escritório,Caneta esferográfica,50,2.50,Publicado
+P006,I001,18/02/2026,ORG03,Pregão,Equipamentos de informática,Teclado USB,0,85.00,Publicado
+P007,I001,20/02/2026,ORG01,Convite,Mobiliário,Mesa de reunião,2,1800.00,Publicado
+P008,I001,22/02/2026,ORG02,Dispensa,Material de escritório,Pasta arquivo,30,texto,Concluído
+P009,I001,25/02/2026,ORG03,Concorrência,Serviços de manutenção,Pintura predial,-1,12500.00,Em andamento
+P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,,5,980.00,Publicado
+P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,Armário baixo,5,980.00,Publicado
