@@ -79,3 +79,72 @@ Um processo poderá possuir vários itens. A combinação entre `process_id` e `
 ### Próxima etapa
 
 Criar o arquivo `data/raw/compras_sinteticas.csv` com registros válidos e registros intencionalmente problemáticos para testar as regras documentadas.
+
+## 2026-07-17 — Regras de validação da base sintética
+
+### Estrutura do arquivo
+
+- O arquivo de entrada deve existir.
+- O cabeçalho deve conter todas as dez colunas obrigatórias.
+- A ausência de qualquer coluna deverá interromper o processamento com erro claro.
+
+### Campos obrigatórios
+
+Todos os campos deverão possuir valor após a remoção de espaços externos.
+
+### Chave do registro
+
+A combinação entre `process_id` e `item_id` deverá ser única.
+
+Registros com chave repetida serão rejeitados como duplicados.
+
+### Data de publicação
+
+- O formato de entrada deverá ser `DD/MM/AAAA`.
+- A data deverá existir no calendário.
+- O formato tratado será `AAAA-MM-DD`.
+
+### Quantidade
+
+- Deverá ser convertível para `float`.
+- Deverá ser maior que zero.
+
+### Valor unitário estimado
+
+- Deverá ser convertível para `float`.
+- Deverá ser maior que zero.
+
+### Valores controlados
+
+Modalidades permitidas:
+
+- `Pregão`
+- `Dispensa`
+- `Concorrência`
+
+Categorias permitidas:
+
+- `Material de escritório`
+- `Equipamentos de informática`
+- `Serviços de manutenção`
+- `Mobiliário`
+
+Situações permitidas:
+
+- `Publicado`
+- `Em andamento`
+- `Concluído`
+- `Cancelado`
+
+### Resultado da validação
+
+- Registros sem erros seguirão para a camada tratada.
+- Registros com um ou mais erros seguirão para a camada de rejeitados.
+- Cada registro rejeitado deverá armazenar todos os motivos encontrados.
+
+### Exceções previstas
+
+- `FileNotFoundError`: arquivo de entrada não encontrado.
+- `KeyError`: campo esperado ausente durante o acesso ao registro.
+- `ValueError`: data, quantidade ou valor inválido.
+- `TypeError`: argumento de tipo incompatível fornecido a uma função.
