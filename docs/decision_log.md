@@ -44,3 +44,38 @@ O projeto não utilizará:
 - Criar o arquivo bruto inicial.
 - Definir regras de validação e transformação.
 - Implementar e testar o pipeline.
+
+## 2026-07-17 — Definição da estrutura da base sintética
+
+### Unidade de análise
+
+Cada linha representará um item pertencente a um processo sintético de compra pública.
+
+Um processo poderá possuir vários itens. A combinação entre `process_id` e `item_id` deverá ser única.
+
+### Colunas definidas
+
+- `process_id`
+- `item_id`
+- `publication_date`
+- `organization_code`
+- `purchase_modality`
+- `category`
+- `item_description`
+- `quantity`
+- `estimated_unit_value`
+- `status`
+
+### Decisões de escopo
+
+- Todas as dez colunas serão obrigatórias.
+- A primeira base utilizará somente dados sintéticos.
+- Não serão incluídos fornecedores, responsáveis, documentos, contatos ou identificadores reais.
+- A base bruta não conterá valor total estimado.
+- O valor total poderá ser calculado durante a transformação.
+- Modalidades, categorias e situações utilizarão listas pequenas de valores controlados.
+- A estrutura permanece limitada aos conhecimentos das duas consolidações de Python.
+
+### Próxima etapa
+
+Criar o arquivo `data/raw/compras_sinteticas.csv` com registros válidos e registros intencionalmente problemáticos para testar as regras documentadas.
