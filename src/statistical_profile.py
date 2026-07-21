@@ -413,6 +413,255 @@ def write_frequency_profile(
     )
 
 
+def build_numeric_profile(
+    data: pd.DataFrame,
+) -> pd.DataFrame:
+    """Calcula medidas descritivas das variáveis quantitativas.
+
+    Args:
+        data: DataFrame validado da base tratada.
+
+    Returns:
+        DataFrame com uma linha para cada variável numérica.
+
+    Raises:
+        TypeError: Se data não for um DataFrame.
+        ValueError: Se alguma coluna numérica estiver ausente,
+            vazia ou contiver valor não numérico.
+    """
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Os dados devem ser fornecidos em um DataFrame.")
+
+    missing_columns = [
+        column
+        for column in NUMERIC_COLUMNS
+        if column not in data.columns
+    ]
+
+    if missing_columns:
+        missing_text = ", ".join(missing_columns)
+        raise ValueError(
+            f"Colunas numéricas ausentes: {missing_text}"
+        )
+
+    profile_rows: list[dict[str, str | int | float]] = []
+
+    for column in NUMERIC_COLUMNS:
+        numeric_series = pd.to_numeric(
+            data[column],
+            errors="coerce",
+        ).dropna()
+
+        if numeric_series.empty:
+            raise ValueError(
+                f"A coluna {column} não possui valores numéricos válidos."
+            )
+
+        if numeric_series.shape[0] != data.shape[0]:
+            raise ValueError(
+                f"A coluna {column} contém valores ausentes "
+                "ou não numéricos."
+            )
+
+        mean_value = float(numeric_series.mean())
+        q1 = float(numeric_series.quantile(0.25))
+        q3 = float(numeric_series.quantile(0.75))
+
+        profile_rows.append(
+            {
+                "variable": column,
+                "count": int(numeric_series.count()),
+                "mean": round(mean_value, 2),
+                "median": round(
+                    float(numeric_series.median()),
+                    2,
+                ),
+                "q1": round(q1, 2),
+                "q3": round(q3, 2),
+                "iqr": round(q3 - q1, 2),
+                "p90": round(
+                    float(numeric_series.quantile(0.90)),
+                    2,
+                ),
+                "p95": round(
+                    float(numeric_series.quantile(0.95)),
+                    2,
+                ),
+                "mean_absolute_deviation": round(
+                    float(
+                        (
+                            numeric_series - mean_value
+                        )
+                        .abs()
+                        .mean()
+                    ),
+                    2,
+                ),
+                "population_variance": round(
+                    float(numeric_series.var(ddof=0)),
+                    2,
+                ),
+                "population_std": round(
+                    float(numeric_series.std(ddof=0)),
+                    2,
+                ),
+                "minimum": round(
+                    float(numeric_series.min()),
+                    2,
+                ),
+                "maximum": round(
+                    float(numeric_series.max()),
+                    2,
+                ),
+            }
+        )
+
+    return pd.DataFrame(profile_rows)
+
+
+def validate_numeric_profile(
+    numeric_profile: pd.DataFrame,
+    expected_count: int,
+) -> None:
+    """Valida consistência e ordenação das medidas numéricas.
+
+    Args:
+        numeric_profile: Perfil numérico calculado.
+        expected_count: Quantidade esperada de observações.
+
+    Raises:
+        TypeError: Se os argumentos tiverem tipos incompatíveis.
+        ValueError: Se alguma medida estiver inconsistente.
+    """
+    if not isinstance(numeric_profile, pd.DataFrame):
+        raise TypeError(
+            "O perfil numérico deve ser um DataFrame."
+        )
+
+    if not isinstance(expected_count, int):
+        raise TypeError(
+            "A contagem esperada deve ser um número inteiro."
+        )
+
+    required_columns = [
+        "variable",
+        "count",
+        "mean",
+        "median",
+        "q1",
+        "q3",
+        "iqr",
+        "p90",
+        "p95",
+        "mean_absolute_deviation",
+        "population_variance",
+        "population_std",
+        "minimum",
+        "maximum",
+    ]
+
+    missing_columns = [
+        column
+        for column in required_columns
+        if column not in numeric_profile.columns
+    ]
+
+    if missing_columns:
+        missing_text = ", ".join(missing_columns)
+        raise ValueError(
+            f"Colunas ausentes no perfil numérico: {missing_text}"
+        )
+
+    for _, row in numeric_profile.iterrows():
+        variable = str(row["variable"])
+
+        if int(row["count"]) != expected_count:
+            raise ValueError(
+                f"A contagem de {variable} não corresponde "
+                f"ao total esperado: {int(row['count'])}."
+            )
+
+        if not (
+            float(row["minimum"])
+            <= float(row["q1"])
+            <= float(row["median"])
+            <= float(row["q3"])
+            <= float(row["maximum"])
+        ):
+            raise ValueError(
+                f"Separatrizes inconsistentes em {variable}."
+            )
+
+        expected_iqr = round(
+            float(row["q3"]) - float(row["q1"]),
+            2,
+        )
+
+        if not np.isclose(
+            float(row["iqr"]),
+            expected_iqr,
+            atol=0.01,
+        ):
+            raise ValueError(
+                f"Intervalo interquartil inconsistente "
+                f"em {variable}."
+            )
+
+        if float(row["p90"]) > float(row["p95"]):
+            raise ValueError(
+                f"P90 maior que P95 em {variable}."
+            )
+
+        non_negative_columns = [
+            "mean_absolute_deviation",
+            "population_variance",
+            "population_std",
+        ]
+
+        for column in non_negative_columns:
+            if float(row[column]) < 0:
+                raise ValueError(
+                    f"{column} não pode ser negativo "
+                    f"em {variable}."
+                )
+
+
+def write_numeric_profile(
+    numeric_profile: pd.DataFrame,
+    output_path: str,
+) -> None:
+    """Grava o perfil numérico em arquivo CSV.
+
+    Args:
+        numeric_profile: Perfil estatístico calculado.
+        output_path: Caminho do arquivo de saída.
+
+    Raises:
+        TypeError: Se os argumentos tiverem tipos incompatíveis.
+    """
+    if not isinstance(numeric_profile, pd.DataFrame):
+        raise TypeError(
+            "O perfil numérico deve ser um DataFrame."
+        )
+
+    if not isinstance(output_path, str):
+        raise TypeError(
+            "O caminho de saída deve ser fornecido como texto."
+        )
+
+    path = Path(output_path)
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    numeric_profile.to_csv(
+        path,
+        index=False,
+        encoding="utf-8",
+    )
+
+
 def run_initial_profile() -> None:
     """Executa a preparação inicial da camada estatística."""
     input_path = "data/processed/compras_tratadas.csv"
@@ -438,6 +687,20 @@ def run_initial_profile() -> None:
     write_frequency_profile(
         frequency_profile,
         "reports/statistics/frequency_profile.csv",
+    )
+
+    numeric_profile = build_numeric_profile(
+        prepared_data
+    )
+
+    validate_numeric_profile(
+        numeric_profile,
+        expected_count=int(prepared_data.shape[0]),
+    )
+
+    write_numeric_profile(
+        numeric_profile,
+        "reports/statistics/numeric_profile.csv",
     )
 
     print("CAMADA ESTATÍSTICA PREPARADA")
@@ -484,7 +747,20 @@ def run_initial_profile() -> None:
             f"{category_count} categorias"
         )
 
+        print("----------------------------")
+    print("PERFIL NUMÉRICO GERADO")
+    print(
+        "Arquivo: "
+        "reports/statistics/numeric_profile.csv"
+    )
+
+    for _, row in numeric_profile.iterrows():
+        print(
+            f"{row['variable']}: "
+            f"média={row['mean']:.2f} | "
+            f"mediana={row['median']:.2f} | "
+            f"P90={row['p90']:.2f} | "
+            f"P95={row['p95']:.2f}"
+        )
 if __name__ == "__main__":
     run_initial_profile()
-
-    

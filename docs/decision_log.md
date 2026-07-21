@@ -287,3 +287,143 @@ Calcular o perfil estatístico das variáveis quantitativas:
 - `quantity`
 - `estimated_unit_value`
 - `estimated_total_value`
+
+---
+
+## 2026-07-21 — Perfil das variáveis quantitativas
+
+### Objetivo
+
+Calcular medidas de posição, separatrizes e dispersão para as variáveis quantitativas da base tratada.
+
+### Arquivos criados ou alterados
+
+- `src/statistical_profile.py`
+- `reports/statistics/numeric_profile.csv`
+- `docs/decision_log.md`
+
+### Variáveis analisadas
+
+- `quantity`
+- `estimated_unit_value`
+- `estimated_total_value`
+
+### Funções implementadas
+
+- `build_numeric_profile()`
+- `validate_numeric_profile()`
+- `write_numeric_profile()`
+
+### Medidas calculadas
+
+- contagem;
+- média;
+- mediana;
+- primeiro quartil;
+- terceiro quartil;
+- intervalo interquartil;
+- percentil 90;
+- percentil 95;
+- desvio médio absoluto;
+- variância populacional;
+- desvio padrão populacional;
+- mínimo;
+- máximo.
+
+### Decisão sobre dispersão
+
+A base sintética ampliada representa todo o universo criado para esta versão do projeto.
+
+Por esse motivo, o relatório principal utiliza:
+
+- variância populacional com `ddof=0`;
+- desvio padrão populacional com `ddof=0`.
+
+As medidas não devem ser interpretadas como estimativas de uma população externa ou de uma instituição real.
+
+### Resultados de `quantity`
+
+- Contagem: 30
+- Média: 74,43
+- Mediana: 10,00
+- Q1: 4,00
+- Q3: 23,75
+- IIQ: 19,75
+- P90: 128,00
+- P95: 365,00
+- Desvio médio absoluto: 103,56
+- Variância populacional: 38.626,65
+- Desvio padrão populacional: 196,54
+- Mínimo: 1,00
+- Máximo: 1.000,00
+
+### Resultados de `estimated_unit_value`
+
+- Contagem: 30
+- Média: 10.453,68
+- Mediana: 1.045,00
+- Q1: 111,25
+- Q3: 3.950,00
+- IIQ: 3.838,75
+- P90: 9.850,00
+- P95: 62.150,00
+- Desvio médio absoluto: 15.709,26
+- Variância populacional: 964.866.094,37
+- Desvio padrão populacional: 31.062,29
+- Mínimo: 0,35
+- Máximo: 150.000,00
+
+### Resultados de `estimated_total_value`
+
+- Contagem: 30
+- Média: 20.237,10
+- Mediana: 8.820,00
+- Q1: 3.367,50
+- Q3: 13.950,00
+- IIQ: 10.582,50
+- P90: 27.980,00
+- P95: 98.250,00
+- Desvio médio absoluto: 21.865,16
+- Variância populacional: 1.698.996.151,89
+- Desvio padrão populacional: 41.218,88
+- Mínimo: 350,00
+- Máximo: 190.000,00
+
+### Validações executadas
+
+Para cada variável:
+
+- a contagem foi igual a 30;
+- mínimo, Q1, mediana, Q3 e máximo ficaram em ordem coerente;
+- o intervalo interquartil correspondeu a `Q3 - Q1`;
+- P90 não foi superior a P95;
+- desvio médio absoluto, variância e desvio padrão não apresentaram valores negativos;
+- todas as observações foram numéricas e não nulas.
+
+### Leitura preliminar
+
+Nas três variáveis, a média ficou acima da mediana.
+
+Esse comportamento é compatível com distribuições assimétricas à direita, influenciadas por alguns valores elevados. A constatação é apenas descritiva e será aprofundada na etapa de candidatos a discrepâncias.
+
+### Regra de granularidade
+
+Todas as estatísticas representam itens.
+
+- `quantity` representa quantidade por item;
+- `estimated_unit_value` representa valor unitário por item;
+- `estimated_total_value` representa quantidade multiplicada pelo valor unitário do item.
+
+Nenhuma dessas distribuições representa valores por processo.
+
+### Limitação
+
+A base possui somente 30 registros sintéticos. P90 e P95 são válidos como demonstração técnica, mas não sustentam generalizações externas.
+
+### Segurança
+
+Todos os resultados foram produzidos com dados sintéticos e não representam compras, valores ou comportamentos de qualquer instituição real.
+
+### Próxima etapa
+
+Comparar `estimated_total_value` por modalidade e categoria e identificar candidatos a discrepâncias pela regra do intervalo interquartil, sem remover registros automaticamente.
