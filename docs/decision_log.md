@@ -427,3 +427,149 @@ Todos os resultados foram produzidos com dados sintéticos e não representam co
 ### Próxima etapa
 
 Comparar `estimated_total_value` por modalidade e categoria e identificar candidatos a discrepâncias pela regra do intervalo interquartil, sem remover registros automaticamente.
+
+---
+
+## 2026-07-21 — Comparações por grupo e candidatos a discrepâncias
+
+### Objetivo
+
+Comparar a distribuição do valor total estimado entre modalidades e categorias e identificar observações candidatas a discrepâncias pela regra do intervalo interquartil.
+
+### Arquivos criados ou alterados
+
+- `src/statistical_profile.py`
+- `reports/statistics/group_profile.csv`
+- `reports/statistics/outlier_candidates.csv`
+- `reports/statistics/statistical_report.md`
+- `docs/decision_log.md`
+
+### Funções implementadas
+
+- `build_group_profile()`
+- `validate_group_profile()`
+- `write_group_profile()`
+- `build_outlier_candidates()`
+- `validate_outlier_candidates()`
+- `write_outlier_candidates()`
+- `write_statistical_report()`
+
+### Comparações realizadas
+
+A variável `estimated_total_value` foi comparada por:
+
+- `purchase_modality`;
+- `category`.
+
+Para cada grupo foram calculados:
+
+- contagem;
+- média;
+- mediana;
+- Q1;
+- Q3;
+- intervalo interquartil;
+- P90;
+- desvio padrão populacional;
+- mínimo;
+- máximo.
+
+### Resultados por modalidade
+
+- Concorrência: 9 itens, média 45.020,56 e mediana 9.250,00.
+- Dispensa: 9 itens, média 6.905,56 e mediana 5.250,00.
+- Pregão: 12 itens, média 11.648,17 e mediana 8.000,00.
+
+A soma das contagens por modalidade foi igual a 30 itens.
+
+### Resultados por categoria
+
+- Equipamentos de informática: 8 itens, média 34.768,75 e mediana 11.200,00.
+- Material de escritório: 8 itens, média 1.446,62 e mediana 859,00.
+- Mobiliário: 7 itens, média 9.777,14 e mediana 9.000,00.
+- Serviços de manutenção: 7 itens, média 35.564,29 e mediana 22.000,00.
+
+A soma das contagens por categoria foi igual a 30 itens.
+
+### Regra para candidatos a discrepâncias
+
+Foram usados os limites convencionais:
+
+```text
+limite inferior = Q1 - 1,5 × IIQ
+limite superior = Q3 + 1,5 × IIQ
+```
+
+Os registros encontrados são candidatos a observações discrepantes, não erros confirmados.
+
+Nenhum item foi removido, corrigido ou alterado automaticamente.
+
+### Ocorrências identificadas
+
+Foram identificadas 12 ocorrências:
+
+- `quantity`: 6;
+- `estimated_unit_value`: 3;
+- `estimated_total_value`: 3.
+
+Uma ocorrência representa a combinação entre um item e uma variável. Um mesmo item pode aparecer em mais de uma variável.
+
+### Candidatos em `quantity`
+
+- P002 / I001: 100
+- P011 / I001: 80
+- P019 / I001: 500
+- P023 / I001: 120
+- P027 / I001: 200
+- P031 / I001: 1.000
+
+Limite superior calculado: 53,38.
+
+### Candidatos em `estimated_unit_value`
+
+- P013 / I001: 22.000,00
+- P022 / I001: 95.000,00
+- P025 / I001: 150.000,00
+
+Limite superior calculado: 9.708,12.
+
+### Candidatos em `estimated_total_value`
+
+- P001 / I001: 35.000,00
+- P022 / I001: 190.000,00
+- P025 / I001: 150.000,00
+
+Limite superior calculado: 29.823,75.
+
+### Interpretação
+
+As diferenças entre média e mediana e os elevados desvios padrão indicam forte influência dos maiores valores em alguns grupos.
+
+Como a base é pequena e sintética, esses resultados servem para demonstrar as técnicas estatísticas e não sustentam conclusões externas.
+
+### Regra de granularidade
+
+Todas as comparações permanecem no nível de item.
+
+Os valores não foram agregados por processo e nenhuma distribuição de itens foi apresentada como distribuição de processos.
+
+### Relatório reproduzível
+
+Foi criado `reports/statistics/statistical_report.md`, gerado automaticamente a partir da base tratada.
+
+O relatório reúne:
+
+- diagnóstico estrutural;
+- frequências categóricas;
+- perfil numérico;
+- comparações por grupo;
+- candidatos a discrepâncias;
+- limitações.
+
+### Segurança
+
+A análise utiliza exclusivamente dados sintéticos. Nenhum valor ou resultado representa uma compra ou instituição real.
+
+### Próxima etapa
+
+Executar os testes finais, atualizar o README e o dicionário de dados e concluir a entrega estatística.

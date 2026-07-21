@@ -1,0 +1,13 @@
+variable,process_id,item_id,value,q1,q3,iqr,lower_limit,upper_limit,reason
+quantity,P002,I001,100.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+quantity,P011,I001,80.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+quantity,P019,I001,500.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+quantity,P023,I001,120.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+quantity,P027,I001,200.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+quantity,P031,I001,1000.0,4.0,23.75,19.75,-25.62,53.38,above_upper_iqr_limit
+estimated_unit_value,P013,I001,22000.0,111.25,3950.0,3838.75,-5646.88,9708.12,above_upper_iqr_limit
+estimated_unit_value,P022,I001,95000.0,111.25,3950.0,3838.75,-5646.88,9708.12,above_upper_iqr_limit
+estimated_unit_value,P025,I001,150000.0,111.25,3950.0,3838.75,-5646.88,9708.12,above_upper_iqr_limit
+estimated_total_value,P001,I001,35000.0,3367.5,13950.0,10582.5,-12506.25,29823.75,above_upper_iqr_limit
+estimated_total_value,P022,I001,190000.0,3367.5,13950.0,10582.5,-12506.25,29823.75,above_upper_iqr_limit
+estimated_total_value,P025,I001,150000.0,3367.5,13950.0,10582.5,-12506.25,29823.75,above_upper_iqr_limit
