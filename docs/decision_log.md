@@ -203,3 +203,87 @@ A camada utiliza exclusivamente a base sintética já versionada no projeto. Nen
 ### Próxima etapa
 
 Implementar as frequências absolutas e percentuais de modalidade, categoria e situação.
+
+---
+
+## 2026-07-21 — Frequências categóricas da base tratada
+
+### Objetivo
+
+Gerar frequências absolutas e percentuais das principais variáveis qualitativas nominais da base tratada.
+
+### Arquivos criados ou alterados
+
+- `src/statistical_profile.py`
+- `reports/statistics/frequency_profile.csv`
+- `docs/decision_log.md`
+
+### Variáveis analisadas
+
+- `purchase_modality`
+- `category`
+- `status`
+
+### Funções implementadas
+
+- `build_frequency_profile()`
+- `validate_frequency_profile()`
+- `write_frequency_profile()`
+
+### Estrutura da saída
+
+O arquivo `frequency_profile.csv` contém:
+
+- `variable`
+- `category_value`
+- `absolute_frequency`
+- `percentage`
+
+### Resultado das frequências
+
+Modalidade:
+
+- Pregão: 12 itens — 40,00%
+- Dispensa: 9 itens — 30,00%
+- Concorrência: 9 itens — 30,00%
+
+Categoria:
+
+- Equipamentos de informática: 8 itens — 26,67%
+- Material de escritório: 8 itens — 26,67%
+- Serviços de manutenção: 7 itens — 23,33%
+- Mobiliário: 7 itens — 23,33%
+
+Situação:
+
+- Publicado: 9 itens — 30,00%
+- Concluído: 9 itens — 30,00%
+- Em andamento: 7 itens — 23,33%
+- Cancelado: 5 itens — 16,67%
+
+### Validações executadas
+
+Para cada variável categórica:
+
+- a soma das frequências absolutas foi igual a 30;
+- a soma dos percentuais foi igual a 100%;
+- todas as categorias presentes na base foram incluídas;
+- nenhuma linha foi excluída ou duplicada no cálculo.
+
+### Regra de granularidade
+
+As frequências representam itens, e não processos.
+
+Um processo com mais de um item contribui com uma ocorrência para cada item existente. A contagem distinta de processos permanece uma métrica separada.
+
+### Segurança
+
+As frequências foram calculadas exclusivamente sobre dados sintéticos. Os resultados não representam comportamento de qualquer instituição real.
+
+### Próxima etapa
+
+Calcular o perfil estatístico das variáveis quantitativas:
+
+- `quantity`
+- `estimated_unit_value`
+- `estimated_total_value`

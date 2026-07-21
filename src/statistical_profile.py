@@ -231,6 +231,188 @@ def build_initial_diagnostic(
     }
 
 
+def build_frequency_profile(
+    data: pd.DataFrame,
+) -> pd.DataFrame:
+    """Calcula frequências absolutas e percentuais das categorias.
+
+    Args:
+        data: DataFrame validado da base tratada.
+
+    Returns:
+        DataFrame em formato longo com variável, categoria,
+        frequência absoluta e percentual.
+
+    Raises:
+        TypeError: Se data não for um DataFrame.
+        ValueError: Se alguma coluna categórica estiver ausente.
+    """
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Os dados devem ser fornecidos em um DataFrame.")
+
+    missing_columns = [
+        column
+        for column in CATEGORICAL_COLUMNS
+        if column not in data.columns
+    ]
+
+    if missing_columns:
+        missing_text = ", ".join(missing_columns)
+        raise ValueError(
+            f"Colunas categóricas ausentes: {missing_text}"
+        )
+
+    frequency_tables: list[pd.DataFrame] = []
+
+    for column in CATEGORICAL_COLUMNS:
+        absolute_frequency = (
+            data[column]
+            .value_counts(dropna=False)
+            .rename("absolute_frequency")
+        )
+
+        percentage = (
+            data[column]
+            .value_counts(
+                normalize=True,
+                dropna=False,
+            )
+            .mul(100)
+            .round(2)
+            .rename("percentage")
+        )
+
+        table = pd.concat(
+            [absolute_frequency, percentage],
+            axis=1,
+        ).reset_index()
+
+        table = table.rename(
+            columns={
+                column: "category_value",
+                "index": "category_value",
+            }
+        )
+
+        table.insert(0, "variable", column)
+
+        frequency_tables.append(table)
+
+    return pd.concat(
+        frequency_tables,
+        ignore_index=True,
+    )
+
+
+def validate_frequency_profile(
+    frequency_profile: pd.DataFrame,
+    expected_total: int,
+) -> None:
+    """Valida os totais das tabelas de frequência.
+
+    Args:
+        frequency_profile: Tabela de frequências calculada.
+        expected_total: Quantidade esperada de registros por variável.
+
+    Raises:
+        TypeError: Se os argumentos tiverem tipos incompatíveis.
+        ValueError: Se frequências ou percentuais não fecharem.
+    """
+    if not isinstance(frequency_profile, pd.DataFrame):
+        raise TypeError(
+            "O perfil de frequências deve ser um DataFrame."
+        )
+
+    if not isinstance(expected_total, int):
+        raise TypeError(
+            "O total esperado deve ser um número inteiro."
+        )
+
+    required_columns = [
+        "variable",
+        "category_value",
+        "absolute_frequency",
+        "percentage",
+    ]
+
+    missing_columns = [
+        column
+        for column in required_columns
+        if column not in frequency_profile.columns
+    ]
+
+    if missing_columns:
+        missing_text = ", ".join(missing_columns)
+        raise ValueError(
+            f"Colunas ausentes no perfil de frequências: {missing_text}"
+        )
+
+    for variable in CATEGORICAL_COLUMNS:
+        variable_data = frequency_profile[
+            frequency_profile["variable"] == variable
+        ]
+
+        absolute_total = int(
+            variable_data["absolute_frequency"].sum()
+        )
+
+        percentage_total = float(
+            variable_data["percentage"].sum()
+        )
+
+        if absolute_total != expected_total:
+            raise ValueError(
+                f"A frequência de {variable} não corresponde "
+                f"ao total esperado: {absolute_total}."
+            )
+
+        if not np.isclose(
+            percentage_total,
+            100.0,
+            atol=0.05,
+        ):
+            raise ValueError(
+                f"Os percentuais de {variable} não totalizam "
+                f"aproximadamente 100%: {percentage_total:.2f}%."
+            )
+
+
+def write_frequency_profile(
+    frequency_profile: pd.DataFrame,
+    output_path: str,
+) -> None:
+    """Grava o perfil de frequências em CSV.
+
+    Args:
+        frequency_profile: Tabela de frequências calculada.
+        output_path: Caminho do arquivo de saída.
+
+    Raises:
+        TypeError: Se os argumentos tiverem tipos incompatíveis.
+    """
+    if not isinstance(frequency_profile, pd.DataFrame):
+        raise TypeError(
+            "O perfil de frequências deve ser um DataFrame."
+        )
+
+    if not isinstance(output_path, str):
+        raise TypeError(
+            "O caminho de saída deve ser fornecido como texto."
+        )
+
+    path = Path(output_path)
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    frequency_profile.to_csv(
+        path,
+        index=False,
+        encoding="utf-8",
+    )
+
+
 def run_initial_profile() -> None:
     """Executa a preparação inicial da camada estatística."""
     input_path = "data/processed/compras_tratadas.csv"
@@ -243,6 +425,20 @@ def run_initial_profile() -> None:
     )
 
     variable_classes = classify_variables()
+
+    frequency_profile = build_frequency_profile(
+        prepared_data
+    )
+
+    validate_frequency_profile(
+        frequency_profile,
+        expected_total=int(prepared_data.shape[0]),
+    )
+
+    write_frequency_profile(
+        frequency_profile,
+        "reports/statistics/frequency_profile.csv",
+    )
 
     print("CAMADA ESTATÍSTICA PREPARADA")
     print("============================")
@@ -269,6 +465,26 @@ def run_initial_profile() -> None:
         columns_text = ", ".join(columns)
         print(f"{group_name}: {columns_text}")
 
+    print("----------------------------")
+    print("FREQUÊNCIAS CATEGÓRICAS GERADAS")
+    print(
+        "Arquivo: "
+        "reports/statistics/frequency_profile.csv"
+    )
+
+    for variable in CATEGORICAL_COLUMNS:
+        category_count = int(
+            frequency_profile[
+                frequency_profile["variable"] == variable
+            ].shape[0]
+        )
+
+        print(
+            f"{variable}: "
+            f"{category_count} categorias"
+        )
 
 if __name__ == "__main__":
     run_initial_profile()
+
+    

@@ -1,0 +1,12 @@
+variable,category_value,absolute_frequency,percentage
+purchase_modality,Pregão,12,40.0
+purchase_modality,Dispensa,9,30.0
+purchase_modality,Concorrência,9,30.0
+category,Equipamentos de informática,8,26.67
+category,Material de escritório,8,26.67
+category,Serviços de manutenção,7,23.33
+category,Mobiliário,7,23.33
+status,Publicado,9,30.0
+status,Concluído,9,30.0
+status,Em andamento,7,23.33
+status,Cancelado,5,16.67
