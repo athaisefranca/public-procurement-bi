@@ -46,3 +46,48 @@ O pipeline deverá ser executado a partir da raiz do projeto com:
 
 ```powershell
 python -m src.transform
+
+---
+
+## 2026-07-21 — Ampliação da base sintética para perfil estatístico
+
+### Objetivo
+
+Ampliar a base sintética da Frente 2 para permitir a aplicação dos conteúdos do curso Estatística com Python: Frequências e Medidas.
+
+### Alterações realizadas
+
+- A base bruta passou de 12 para 37 registros.
+- O número de registros válidos passou de 5 para 30.
+- Os 7 registros inválidos originais foram preservados.
+- A estrutura das colunas não foi alterada.
+- A granularidade continua sendo de um item por linha.
+- Foram adicionados valores variados de quantidade, valor unitário e valor total estimado.
+- Foram ampliadas as ocorrências de modalidades, categorias e situações.
+- Foram incluídos valores altos plausíveis para permitir testes de assimetria e identificação de candidatos a discrepâncias.
+
+### Resultado do pipeline
+
+- Registros lidos: 37
+- Registros válidos: 30
+- Registros rejeitados: 7
+
+### Validações executadas
+
+- conferência da quantidade de registros brutos;
+- conferência da quantidade de registros tratados;
+- conferência da quantidade de registros rejeitados;
+- revisão dos sete motivos de rejeição;
+- confirmação de que a combinação entre processo e item continua sendo a chave da base;
+- confirmação de que o pipeline anterior não apresentou regressão.
+
+### Segurança
+
+- Todos os novos registros são sintéticos.
+- Nenhum dado profissional, pessoal ou institucional real foi utilizado.
+- Os valores foram criados somente para demonstração estatística.
+- Os resultados não representam fatos sobre qualquer instituição real.
+
+### Próxima etapa
+
+Criar a camada de perfil estatístico em `src/statistical_profile.py`, usando a base tratada no nível de item.

@@ -1,5 +1,5 @@
 RELATÓRIO DE QUALIDADE
 =====================
-Total de registros lidos: 12
-Registros válidos: 5
+Total de registros lidos: 37
+Registros válidos: 30
 Registros rejeitados: 7

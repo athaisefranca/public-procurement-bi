@@ -11,3 +11,28 @@ P008,I001,22/02/2026,ORG02,Dispensa,Material de escritório,Pasta arquivo,30,tex
 P009,I001,25/02/2026,ORG03,Concorrência,Serviços de manutenção,Pintura predial,-1,12500.00,Em andamento
 P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,,5,980.00,Publicado
 P010,I001,28/02/2026,ORG01,Pregão,Mobiliário,Armário baixo,5,980.00,Publicado
+P011,I001,03/03/2026,ORG02,Pregão,Material de escritório,Caderno universitário,80,18.50,Concluído
+P011,I002,03/03/2026,ORG02,Pregão,Material de escritório,Grampeador de mesa,15,42.00,Concluído
+P012,I001,05/03/2026,ORG03,Dispensa,Mobiliário,Estante metálica,6,780.00,Publicado
+P013,I001,08/03/2026,ORG01,Concorrência,Serviços de manutenção,Manutenção elétrica,1,22000.00,Em andamento
+P014,I001,10/03/2026,ORG02,Pregão,Equipamentos de informática,Mouse óptico,40,55.00,Concluído
+P015,I001,12/03/2026,ORG03,Dispensa,Material de escritório,Toner para impressora,12,310.00,Publicado
+P016,I001,15/03/2026,ORG01,Concorrência,Mobiliário,Mesa de trabalho,18,890.00,Em andamento
+P017,I001,18/03/2026,ORG02,Pregão,Serviços de manutenção,Suporte técnico especializado,6,4200.00,Concluído
+P018,I001,20/03/2026,ORG03,Dispensa,Equipamentos de informática,Impressora multifuncional,4,2600.00,Cancelado
+P019,I001,22/03/2026,ORG01,Concorrência,Material de escritório,Envelope pardo,500,0.85,Concluído
+P020,I001,25/03/2026,ORG02,Pregão,Mobiliário,Armário alto,10,1450.00,Publicado
+P021,I001,28/03/2026,ORG03,Dispensa,Serviços de manutenção,Limpeza de equipamentos,3,1750.00,Em andamento
+P022,I001,02/04/2026,ORG01,Concorrência,Equipamentos de informática,Servidor de arquivos,2,95000.00,Publicado
+P023,I001,05/04/2026,ORG02,Pregão,Material de escritório,Marcador permanente,120,6.40,Concluído
+P024,I001,08/04/2026,ORG03,Dispensa,Mobiliário,Longarina de três lugares,8,1350.00,Cancelado
+P025,I001,10/04/2026,ORG01,Concorrência,Serviços de manutenção,Reforma de cobertura,1,150000.00,Em andamento
+P026,I001,12/04/2026,ORG02,Pregão,Equipamentos de informática,Webcam HD,25,280.00,Publicado
+P027,I001,15/04/2026,ORG03,Dispensa,Material de escritório,Pasta suspensa,200,4.75,Concluído
+P028,I001,18/04/2026,ORG01,Concorrência,Mobiliário,Gaveteiro volante,12,720.00,Em andamento
+P029,I001,20/04/2026,ORG02,Pregão,Serviços de manutenção,Manutenção de ar-condicionado,4,6800.00,Cancelado
+P030,I001,22/04/2026,ORG03,Dispensa,Equipamentos de informática,Projetor multimídia,3,4100.00,Concluído
+P031,I001,25/04/2026,ORG01,Concorrência,Material de escritório,Etiqueta adesiva,1000,0.35,Publicado
+P032,I001,28/04/2026,ORG02,Pregão,Mobiliário,Mesa lateral,15,320.00,Em andamento
+P033,I001,02/05/2026,ORG03,Dispensa,Serviços de manutenção,Higienização técnica,2,5400.00,Cancelado
+P034,I001,05/05/2026,ORG01,Concorrência,Equipamentos de informática,Switch de rede,5,1850.00,Cancelado
