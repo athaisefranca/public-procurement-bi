@@ -573,3 +573,250 @@ A análise utiliza exclusivamente dados sintéticos. Nenhum valor ou resultado r
 ### Próxima etapa
 
 Executar os testes finais, atualizar o README e o dicionário de dados e concluir a entrega estatística.
+
+---
+
+## 2026-07-21 — Encerramento da camada de perfil estatístico
+
+### Objetivo
+
+Concluir a aplicação do curso Estatística com Python: Frequências e Medidas à Frente 2 — Business Intelligence em Compras Públicas.
+
+A entrega foi integrada ao repositório existente, sem criação de projeto paralelo e sem antecipar SQL, Power Query, DAX ou Power BI.
+
+### Escopo concluído
+
+Foram concluídas as seguintes etapas:
+
+- ampliação controlada da base sintética;
+- preparação da camada estatística;
+- frequências absolutas e percentuais;
+- perfil das variáveis quantitativas;
+- comparações por modalidade e categoria;
+- identificação de candidatos a discrepâncias;
+- geração de relatório estatístico reproduzível;
+- testes finais do fluxo completo;
+- atualização do README;
+- atualização do dicionário de dados.
+
+### Pipeline final
+
+O fluxo atual do projeto é:
+
+```text
+data/raw/compras_sinteticas.csv
+        ↓
+src/validate.py
+        ↓
+src/transform.py
+        ↓
+data/processed/compras_tratadas.csv
+data/rejected/compras_rejeitadas.csv
+reports/quality/quality_report.txt
+        ↓
+src/statistical_profile.py
+        ↓
+reports/statistics/frequency_profile.csv
+reports/statistics/numeric_profile.csv
+reports/statistics/group_profile.csv
+reports/statistics/outlier_candidates.csv
+reports/statistics/statistical_report.md
+```
+
+### Arquivos criados ou atualizados na entrega
+
+Código:
+
+- `src/statistical_profile.py`
+
+Dados sintéticos e derivados:
+
+- `data/raw/compras_sinteticas.csv`
+- `data/processed/compras_tratadas.csv`
+- `data/rejected/compras_rejeitadas.csv`
+
+Relatórios:
+
+- `reports/quality/quality_report.txt`
+- `reports/statistics/frequency_profile.csv`
+- `reports/statistics/numeric_profile.csv`
+- `reports/statistics/group_profile.csv`
+- `reports/statistics/outlier_candidates.csv`
+- `reports/statistics/statistical_report.md`
+
+Documentação:
+
+- `README.md`
+- `docs/data_dictionary.md`
+- `docs/decision_log.md`
+- `requirements.txt`
+
+### Resultado final do tratamento
+
+- Registros brutos: 37
+- Registros válidos: 30
+- Registros rejeitados: 7
+- Processos distintos: 28
+- Chaves `process_id + item_id` duplicadas na base tratada: 0
+
+### Resultado final da camada estatística
+
+- Linhas do perfil de frequências: 11
+- Linhas do perfil numérico: 3
+- Linhas do perfil por grupo: 7
+- Ocorrências candidatas a discrepâncias: 12
+- Candidatos registrados dentro dos limites do IIQ: 0
+
+### Frequências implementadas
+
+Foram calculadas frequências absolutas e percentuais de:
+
+- `purchase_modality`;
+- `category`;
+- `status`.
+
+As frequências representam itens e fecham em 30 observações e 100% para cada variável.
+
+### Métricas quantitativas implementadas
+
+Para:
+
+- `quantity`;
+- `estimated_unit_value`;
+- `estimated_total_value`;
+
+foram calculados:
+
+- contagem;
+- média;
+- mediana;
+- Q1;
+- Q3;
+- intervalo interquartil;
+- P90;
+- P95;
+- desvio médio absoluto;
+- variância populacional;
+- desvio padrão populacional;
+- mínimo;
+- máximo.
+
+### Comparações por grupo
+
+A variável `estimated_total_value` foi comparada por:
+
+- modalidade;
+- categoria.
+
+As comparações permanecem no nível de item.
+
+### Candidatos a discrepâncias
+
+A identificação utiliza:
+
+```text
+limite inferior = Q1 - 1,5 × IIQ
+limite superior = Q3 + 1,5 × IIQ
+```
+
+Foram identificadas:
+
+- 6 ocorrências em `quantity`;
+- 3 ocorrências em `estimated_unit_value`;
+- 3 ocorrências em `estimated_total_value`.
+
+Nenhum registro foi removido, corrigido ou substituído automaticamente.
+
+### Granularidade
+
+A unidade de análise permanece:
+
+> uma linha representa um item pertencente a um processo sintético.
+
+A contagem de processos é feita separadamente por `process_id` distinto.
+
+Nenhuma distribuição de itens é apresentada como distribuição de processos.
+
+### Testes finais executados
+
+Foram executados:
+
+```powershell
+python -m py_compile src\validate.py
+python -m py_compile src\transform.py
+python -m py_compile src\statistical_profile.py
+python -m src.transform
+python -m src.statistical_profile
+```
+
+Também foram conferidos:
+
+- número de registros brutos, tratados e rejeitados;
+- número de processos distintos;
+- ausência de chaves duplicadas;
+- quantidade de linhas dos relatórios;
+- fechamento das frequências absolutas;
+- fechamento dos percentuais;
+- fechamento das contagens por grupo;
+- candidatos realmente fora dos limites calculados;
+- reprodução dos arquivos derivados;
+- ausência de alterações inesperadas no Git.
+
+### Resultado dos testes
+
+Todos os testes apresentaram o comportamento esperado.
+
+O repositório permaneceu reproduzível e consistente após a execução completa.
+
+### Segurança
+
+A entrega utiliza exclusivamente dados sintéticos.
+
+Não foram utilizados:
+
+- planilhas profissionais originais;
+- dados pessoais;
+- comentários internos;
+- documentos institucionais;
+- fornecedores reais;
+- responsáveis reais;
+- identificadores sensíveis;
+- números de processos reais;
+- valores profissionais reais.
+
+Os resultados não representam fatos sobre órgãos, instituições ou compras reais.
+
+### Limites da entrega
+
+Não foram implementados nesta etapa:
+
+- valor homologado;
+- base pública oficial;
+- análise temporal robusta;
+- SQL;
+- banco de dados;
+- modelagem dimensional;
+- Power Query;
+- DAX;
+- Power BI;
+- dashboard;
+- remoção automática de discrepâncias.
+
+### Decisão de encerramento
+
+A camada de perfil estatístico da Frente 2 está concluída.
+
+A próxima evolução deverá ocorrer somente quando um novo curso trouxer conteúdo aplicável às camadas futuras do projeto.
+
+### Próximas evoluções previstas
+
+- seleção e documentação de uma base pública oficial;
+- avaliação de cobertura e granularidade da fonte;
+- adaptação do pipeline ao novo esquema;
+- análise temporal;
+- banco de dados e SQL;
+- modelagem dimensional;
+- Power Query;
+- DAX;
+- Power BI;
+- páginas executivas, analíticas e de qualidade.

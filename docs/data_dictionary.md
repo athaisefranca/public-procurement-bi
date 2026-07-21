@@ -208,3 +208,231 @@ Os registros deverão ser plausíveis apenas para permitir testes de estrutura, 
 | Versão | Data | Alteração |
 |---|---|---|
 | `0.1` | `2026-07-17` | Definição inicial das colunas, unidade de análise e regras básicas. |
+
+---
+
+## Camada estatística
+
+A camada estatística utiliza exclusivamente:
+
+```text
+data/processed/compras_tratadas.csv
+```
+
+A unidade de análise permanece no nível de item:
+
+> uma linha representa um item pertencente a um processo sintético.
+
+As métricas desta camada não devem ser interpretadas como métricas por processo.
+
+## Classificação das variáveis
+
+### Identificadores
+
+| Campo | Classificação | Uso |
+|---|---|---|
+| `process_id` | Identificador | Identifica o processo sintético |
+| `item_id` | Identificador | Identifica o item dentro do processo |
+| `organization_code` | Identificador categórico | Identifica a organização fictícia |
+
+### Data
+
+| Campo | Classificação | Uso |
+|---|---|---|
+| `publication_date` | Data | Data de publicação do item |
+
+### Variáveis qualitativas nominais
+
+| Campo | Classificação | Uso estatístico |
+|---|---|---|
+| `purchase_modality` | Qualitativa nominal | Frequências e comparação por modalidade |
+| `category` | Qualitativa nominal | Frequências e comparação por categoria |
+| `status` | Qualitativa nominal | Frequências por situação |
+
+### Variáveis quantitativas
+
+| Campo | Classificação | Uso estatístico |
+|---|---|---|
+| `quantity` | Quantitativa | Perfil de quantidade por item |
+| `estimated_unit_value` | Quantitativa contínua | Perfil do valor unitário estimado por item |
+| `estimated_total_value` | Quantitativa contínua derivada | Perfil do valor total estimado por item |
+
+### Texto descritivo
+
+| Campo | Classificação | Uso |
+|---|---|---|
+| `item_description` | Texto descritivo | Descrição sintética do item |
+
+## Regras das variáveis quantitativas
+
+### `quantity`
+
+Representa a quantidade prevista para o item.
+
+Regras:
+
+- deve ser numérica;
+- deve ser maior que zero;
+- é analisada no nível de item;
+- não deve ser somada entre unidades de medida incompatíveis em uma futura base pública.
+
+### `estimated_unit_value`
+
+Representa o valor estimado de uma unidade do item.
+
+Regras:
+
+- deve ser numérico;
+- deve ser maior que zero;
+- não representa o valor total do item;
+- não deve ser somado como indicador financeiro agregado.
+
+### `estimated_total_value`
+
+Representa o valor total estimado do item.
+
+Fórmula:
+
+```text
+estimated_total_value = quantity × estimated_unit_value
+```
+
+Regras:
+
+- é calculado durante o tratamento;
+- não existe no arquivo bruto;
+- pode ser usado em somas e distribuições no nível de item;
+- não representa valor homologado;
+- não deve ser interpretado como valor total por processo sem agregação prévia.
+
+## Campo não disponível
+
+### `valor_homologado`
+
+Este campo não existe na versão atual da base.
+
+Nenhuma coluna existente deve ser renomeada ou reinterpretada como valor homologado.
+
+A métrica só poderá ser incorporada quando uma futura fonte pública apresentar um campo final com significado, cobertura e regra de negócio documentados.
+
+## Métricas estatísticas documentadas
+
+Para as variáveis quantitativas são calculadas:
+
+- contagem;
+- média;
+- mediana;
+- primeiro quartil;
+- terceiro quartil;
+- intervalo interquartil;
+- percentil 90;
+- percentil 95;
+- desvio médio absoluto;
+- variância populacional;
+- desvio padrão populacional;
+- mínimo;
+- máximo.
+
+A variância e o desvio padrão usam:
+
+```text
+ddof=0
+```
+
+Isso significa que as medidas são tratadas como populacionais dentro do universo sintético desta versão.
+
+## Frequências categóricas
+
+São calculadas frequências absolutas e percentuais para:
+
+- `purchase_modality`;
+- `category`;
+- `status`.
+
+As frequências representam itens.
+
+Um processo com dois itens contribui com duas ocorrências.
+
+## Comparações por grupo
+
+A variável analisada nas comparações é:
+
+```text
+estimated_total_value
+```
+
+Os grupos utilizados são:
+
+- `purchase_modality`;
+- `category`.
+
+Para cada grupo são calculados:
+
+- contagem;
+- média;
+- mediana;
+- Q1;
+- Q3;
+- intervalo interquartil;
+- P90;
+- desvio padrão populacional;
+- mínimo;
+- máximo.
+
+## Candidatos a discrepâncias
+
+A identificação utiliza:
+
+```text
+limite inferior = Q1 - 1,5 × IIQ
+limite superior = Q3 + 1,5 × IIQ
+```
+
+Uma observação é registrada como candidata quando:
+
+```text
+valor < limite inferior
+```
+
+ou:
+
+```text
+valor > limite superior
+```
+
+As variáveis verificadas são:
+
+- `quantity`;
+- `estimated_unit_value`;
+- `estimated_total_value`.
+
+A classificação como candidata não significa:
+
+- erro;
+- fraude;
+- inconsistência confirmada;
+- necessidade automática de correção;
+- necessidade automática de remoção.
+
+Os registros permanecem na base tratada.
+
+## Arquivos estatísticos derivados
+
+| Arquivo | Conteúdo |
+|---|---|
+| `reports/statistics/frequency_profile.csv` | Frequências absolutas e percentuais |
+| `reports/statistics/numeric_profile.csv` | Perfil das variáveis quantitativas |
+| `reports/statistics/group_profile.csv` | Comparações por modalidade e categoria |
+| `reports/statistics/outlier_candidates.csv` | Candidatos a discrepâncias |
+| `reports/statistics/statistical_report.md` | Relatório consolidado e reproduzível |
+
+## Limitações da camada estatística
+
+- A base contém 30 itens válidos.
+- Todos os registros são sintéticos.
+- Os grupos possuem poucas observações.
+- P90 e P95 são demonstrativos.
+- Os resultados não representam uma população externa.
+- Não existe valor homologado.
+- Não há análise temporal robusta.
+- Não há mistura entre nível de item e nível de processo.
