@@ -91,3 +91,115 @@ Ampliar a base sintética da Frente 2 para permitir a aplicação dos conteúdos
 ### Próxima etapa
 
 Criar a camada de perfil estatístico em `src/statistical_profile.py`, usando a base tratada no nível de item.
+
+---
+
+## 2026-07-21 — Preparação da camada estatística
+
+### Objetivo
+
+Preparar a estrutura técnica responsável por ler, validar e classificar a base tratada antes da geração das métricas estatísticas.
+
+### Arquivos criados ou alterados
+
+- `src/statistical_profile.py`
+- `requirements.txt`
+- `reports/statistics/.gitkeep`
+
+### Dependências utilizadas
+
+- pandas 3.0.3
+- NumPy 2.5.1
+
+As dependências foram instaladas no ambiente virtual local do projeto.
+
+### Funções implementadas
+
+- `load_treated_data()`
+- `validate_statistical_columns()`
+- `prepare_statistical_base()`
+- `classify_variables()`
+- `build_initial_diagnostic()`
+- `run_initial_profile()`
+
+### Validações implementadas
+
+- existência do arquivo tratado;
+- base não vazia;
+- presença das colunas estatísticas obrigatórias;
+- ausência de valores nulos nas colunas necessárias;
+- conversão das variáveis quantitativas para valores numéricos;
+- validação da data de publicação;
+- verificação da unicidade da combinação `process_id + item_id`;
+- confirmação da granularidade de item.
+
+### Classificação das variáveis
+
+Identificadores:
+
+- `process_id`
+- `item_id`
+- `organization_code`
+
+Data:
+
+- `publication_date`
+
+Qualitativas nominais:
+
+- `purchase_modality`
+- `category`
+- `status`
+
+Quantitativas:
+
+- `quantity`
+- `estimated_unit_value`
+- `estimated_total_value`
+
+Texto descritivo:
+
+- `item_description`
+
+### Resultado da execução
+
+- Itens analisados: 30
+- Processos distintos: 28
+- Chaves processo-item únicas: 30
+- Chaves processo-item duplicadas: 0
+
+### Comando de execução
+
+```powershell
+python -m src.statistical_profile
+```
+
+### Decisão de granularidade
+
+A camada estatística continuará usando o nível de item:
+
+> uma linha representa um item pertencente a um processo sintético de compra.
+
+A contagem de processos será realizada separadamente por `process_id` distinto. Nenhuma distribuição de itens será apresentada como se representasse uma distribuição de processos.
+
+### Limites desta fase
+
+Ainda não foram implementados:
+
+- frequências absolutas ou percentuais;
+- médias e medianas;
+- quartis e percentis;
+- medidas de dispersão;
+- identificação de candidatos a discrepâncias;
+- comparações por grupo;
+- gráficos.
+
+Esses cálculos serão acrescentados nas fases seguintes.
+
+### Segurança
+
+A camada utiliza exclusivamente a base sintética já versionada no projeto. Nenhum dado profissional, pessoal ou institucional real foi utilizado.
+
+### Próxima etapa
+
+Implementar as frequências absolutas e percentuais de modalidade, categoria e situação.
